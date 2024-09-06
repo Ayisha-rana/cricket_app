@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class Rankings extends StatefulWidget {
+class RankingsPage extends StatefulWidget {
   @override
   _RankingsPageState createState() => _RankingsPageState();
 }
 
-class _RankingsPageState extends State<Rankings> {
+class _RankingsPageState extends State<RankingsPage> {
   List _batsmen = [];
   bool _isLoading = true;
 

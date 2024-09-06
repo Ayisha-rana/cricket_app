@@ -1,9 +1,11 @@
-import 'package:cricket_app/screen/more.dart';
-import 'package:cricket_app/screen/rankings.dart';
-import 'package:cricket_app/screen/schedule.dart';
-import 'package:cricket_app/screen/stats.dart';
+import 'package:cricket_app/screen/aboutuspage.dart';
+import 'package:cricket_app/screen/morepage.dart';
+import 'package:cricket_app/screen/privacypolicy.dart';
+import 'package:cricket_app/screen/rankingspage.dart';
+import 'package:cricket_app/screen/schedulepage.dart';
+import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';
-import 'package:cricket_app/screen/news.dart';
+import 'package:cricket_app/screen/newspage.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      home: const PrivacyPolicyPage(),
     );
   }
 }
@@ -31,10 +33,10 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    Center(child: Text('Scores')), // Page 2: Scores
+    const Center(child: Text('Scores')), // Page 2: Scores
     MatchSchedulesScreen(),
     NewsPage(),
-    Rankings(),
+    RankingsPage(),
     StatsScreen(),
   ];
 
@@ -51,7 +53,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
@@ -60,12 +62,12 @@ class _MainPageState extends State<MainPage> {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 5,
               blurRadius: 10,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
@@ -75,23 +77,23 @@ class _MainPageState extends State<MainPage> {
             currentIndex: _currentIndex, // Current selected index
             onTap: _onTap, // Change page on tap
             items: [
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.score),
                 label: 'Schedule',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.article),
                 label: 'News',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.star),
                 label: 'Rankings',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.bar_chart),
                 label: 'Stats',
               ),
@@ -99,8 +101,8 @@ class _MainPageState extends State<MainPage> {
             selectedItemColor: Colors.blueAccent, // Color for selected item
             unselectedItemColor: Colors.grey, // Color for unselected items
             selectedLabelStyle:
-                TextStyle(fontWeight: FontWeight.bold), // Bold selected label
-            unselectedLabelStyle: TextStyle(
+                const TextStyle(fontWeight: FontWeight.bold), // Bold selected label
+            unselectedLabelStyle: const TextStyle(
                 fontWeight: FontWeight.normal), // Normal unselected label
             iconSize: 28, // Size of the icons
             elevation: 10, // Elevation effect

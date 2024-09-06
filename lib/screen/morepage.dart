@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cricket_app/screen/schedule.dart';
+import 'package:cricket_app/screen/schedulepage.dart';
 
 class MorePage extends StatelessWidget {
   MorePage({super.key});

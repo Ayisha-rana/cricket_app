@@ -1,7 +1,7 @@
-import 'package:cricket_app/screen/news.dart';
-import 'package:cricket_app/screen/rankings.dart';
-import 'package:cricket_app/screen/schedule.dart';
-import 'package:cricket_app/screen/stats.dart';
+import 'package:cricket_app/screen/newspage.dart';
+import 'package:cricket_app/screen/rankingspage.dart';
+import 'package:cricket_app/screen/schedulepage.dart';
+import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
     const Center(child: Text('Scores')), // Page 2: Scores
     MatchSchedulesScreen(),
     NewsPage(),
-    Rankings(),
+    RankingsPage(),
     StatsScreen(),
   ];
 
