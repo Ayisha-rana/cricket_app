@@ -1,3 +1,4 @@
+import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/newspage.dart';
 import 'package:cricket_app/screen/rankingspage.dart';
 import 'package:cricket_app/screen/schedulepage.dart';
@@ -13,7 +14,7 @@ class _HomePageState extends State<Homepage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Scores')), // Page 2: Scores
+    const Center(child: Text('Scores')), 
     MatchSchedulesScreen(),
     NewsPage(),
     RankingsPage(),
@@ -29,6 +30,19 @@ class _HomePageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+  backgroundColor: const Color.fromARGB(255, 91, 132, 93),
+  title: Text('s'),
+  actions: [
+    IconButton(
+      icon: Icon(Icons.more_vert),
+      onPressed: () {
+       Navigator.push(context, MaterialPageRoute(builder: (context)=>MorePage()));
+      },
+    ),
+  ],
+),
+
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

@@ -1,3 +1,5 @@
+import 'package:cricket_app/screen/homePage.dart';
+import 'package:cricket_app/screen/playerpage.dart';
 import 'package:cricket_app/screen/privacypolicy.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PrivacyPolicyPage(),
+      home:  Playerpage(),
     );
   }
 }
