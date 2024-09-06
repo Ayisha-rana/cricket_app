@@ -4,12 +4,12 @@ import 'package:cricket_app/screen/schedulepage.dart';
 import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';
 
-class MainPage extends StatefulWidget {
+class Homepage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _HomePageState extends State<Homepage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
