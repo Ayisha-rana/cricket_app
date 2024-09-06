@@ -1,3 +1,4 @@
+import 'package:cricket_app/screen/more.dart';
 import 'package:cricket_app/screen/rankings.dart';
 import 'package:cricket_app/screen/schedule.dart';
 import 'package:cricket_app/screen/stats.dart';
@@ -30,7 +31,7 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    Center(child: Text('Scores')), // Page 2: Scores
+    Center(child: Text('Scores')),
     MatchSchedulesScreen(),
     NewsPage(),
     Rankings(),
@@ -46,7 +47,18 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex], 
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(82, 135, 82, 1),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert,color: Colors.white,),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>MorePage()));
+            },
+          ),
+        ],
+      ),
+      body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -59,7 +71,7 @@ class _MainPageState extends State<MainPage> {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 5,
               blurRadius: 10,
-              offset: Offset(0, 3), 
+              offset: Offset(0, 3),
             ),
           ],
         ),
@@ -70,16 +82,16 @@ class _MainPageState extends State<MainPage> {
           ),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
-            type: BottomNavigationBarType.fixed, // Makes the items fixed
-            currentIndex: _currentIndex, // Current selected index
-            onTap: _onTap, // Change page on tap
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: _onTap,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.score),
+                icon: Icon(Icons.lock_clock),
                 label: 'Schedule',
               ),
               BottomNavigationBarItem(
@@ -95,12 +107,12 @@ class _MainPageState extends State<MainPage> {
                 label: 'Stats',
               ),
             ],
-            selectedItemColor: Colors.blueAccent, // Color for selected item
-            unselectedItemColor: Colors.grey, // Color for unselected items
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold), // Bold selected label
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal), // Normal unselected label
-            iconSize: 28, // Size of the icons
-            elevation: 10, // Elevation effect
+            selectedItemColor: const Color.fromARGB(255, 116, 185, 118),
+            unselectedItemColor: Colors.grey,
+            selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+            iconSize: 28,
+            elevation: 10,
           ),
         ),
       ),
