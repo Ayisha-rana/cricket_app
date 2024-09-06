@@ -26,7 +26,7 @@ class MorePage extends StatelessWidget {
     'ICC Ranking',
     'Photos',
     'Records',
-    'Settings',
+    'Setetings',
     'Feedback',
     'Privacy Policy',
     'About Us',

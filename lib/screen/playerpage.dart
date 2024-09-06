@@ -58,7 +58,7 @@ class _PlayerpageState extends State<Playerpage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 85, 147, 88),
         title: const Text(
-          'Players',
+          'Palayers',
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,

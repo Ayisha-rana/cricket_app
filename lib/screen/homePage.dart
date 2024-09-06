@@ -14,7 +14,7 @@ class _HomePageState extends State<Homepage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Scores')), 
+    const Center(child: Text('aScores')), 
     MatchSchedulesScreen(),
     NewsPage(),
     RankingsPage(),

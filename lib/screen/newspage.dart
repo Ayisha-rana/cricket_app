@@ -36,7 +36,7 @@ class _NewsPageState extends State<NewsPage> {
           _news = data['topics'] ?? []; // Update this key based on actual structure
         });
       } else {
-        print('Unexpected data format');
+        print('Uneaxpected data format');
       }
     } else {
       print('Failed to load data, status code: ${response.statusCode}');

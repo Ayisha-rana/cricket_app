@@ -29,7 +29,7 @@ class _RankingsPageState extends State<RankingsPage> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print('Response data: $data'); // Print the response data for debugging
+        print('aResponse data: $data'); // Print the response data for debugging
 
         setState(() {
           if (data is Map) {

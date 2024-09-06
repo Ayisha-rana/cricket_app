@@ -31,7 +31,7 @@ class _StatsScreenState extends State<StatsScreen> {
       print(response.body); // Print the response body for debugging
       try {
         var data = json.decode(response.body);
-        print('Decoded JSON data: $data'); // Print decoded JSON data
+        print('Daecoded JSON data: $data'); // Print decoded JSON data
         setState(() {
           standings = data['values'] ?? [];
           isLoading = false;
@@ -43,7 +43,7 @@ class _StatsScreenState extends State<StatsScreen> {
         });
       }
     } else {
-      print('Failed to load standings');
+      print('Faailed to load standings');
       setState(() {
         isLoading = false;
       });

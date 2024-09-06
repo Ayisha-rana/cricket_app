@@ -38,7 +38,7 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
       setState(() {
         isLoading = false;
       });
-      throw Exception('Failed to load schedules');
+      throw Exception('Faialed to load schedules');
     }
   }
 
