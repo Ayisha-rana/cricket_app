@@ -2,13 +2,44 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+class StatsCategory {
+  final String category;
+  final List<StatsType> types;
+
+  StatsCategory({required this.category, required this.types});
+
+  factory StatsCategory.fromJson(Map<String, dynamic> json) {
+    return StatsCategory(
+      category: json['category'] ?? 'No Category',
+      types: (json['types'] as List)
+          .map((type) => StatsType.fromJson(type))
+          .toList(),
+    );
+  }
+}
+
+// Model class for StatsType
+class StatsType {
+  final String header;
+  final String category;
+
+  StatsType({required this.header, required this.category});
+
+  factory StatsType.fromJson(Map<String, dynamic> json) {
+    return StatsType(
+      header: json['header'] ?? 'No Header',
+      category: json['category'] ?? 'No Category',
+    );
+  }
+}
+
 class StatsScreen extends StatefulWidget {
   @override
   _StatsScreenState createState() => _StatsScreenState();
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  List<dynamic> standings = [];
+  List<StatsCategory> standings = [];
   bool isLoading = true;
 
   @override
@@ -28,12 +59,13 @@ class _StatsScreenState extends State<StatsScreen> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body); // Print the response body for debugging
       try {
         var data = json.decode(response.body);
-        print('Daecoded JSON data: $data'); // Print decoded JSON data
+        print('Decoded JSON data: $data'); // Print decoded JSON data
         setState(() {
-          standings = data['values'] ?? [];
+          standings = (data['values'] as List)
+              .map((item) => StatsCategory.fromJson(item))
+              .toList();
           isLoading = false;
         });
       } catch (e) {
@@ -43,7 +75,7 @@ class _StatsScreenState extends State<StatsScreen> {
         });
       }
     } else {
-      print('Faailed to load standings');
+      print('Failed to load standings');
       setState(() {
         isLoading = false;
       });
@@ -60,25 +92,23 @@ class _StatsScreenState extends State<StatsScreen> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : standings.isEmpty
-          ? Center(child: Text('No standings available'))
-          : ListView.builder(
-        itemCount: standings.length,
-        itemBuilder: (context, index) {
-          var team = standings[index]['value'] ?? [];
-          var rank = team[0] ?? 'No Rank';
-          var flag = team[1] ?? 'No Flag'; 
-          var teamName = team[2] ?? 'No Team Name';
-          var points = team[3] ?? 'No Points Available';
+              ? Center(child: Text('No standings available'))
+              : ListView.builder(
+                  itemCount: standings.length,
+                  itemBuilder: (context, index) {
+                    final category = standings[index];
 
-          return Card(
-            child: ListTile(
-              leading: flag != 'No Flag' ? Icon(Icons.flag) : null, // Placeholder for flag icon
-              title: Text('$rank. $teamName'),
-              subtitle: Text('Points: $points'),
-            ),
-          );
-        },
-      ),
+                    return ExpansionTile(
+                      title: Text(category.category),
+                      children: category.types.map((type) {
+                        return ListTile(
+                          title: Text(type.header),
+                          subtitle: Text(type.category),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
     );
   }
 }

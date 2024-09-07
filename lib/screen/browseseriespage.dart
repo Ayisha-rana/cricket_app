@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +11,7 @@ class BrowseSeriesPage extends StatefulWidget {
 }
 
 class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
-  List<dynamic> seriesList = [];
+  List<Series> seriesList = [];
   bool isLoading = true;
 
   @override
@@ -39,7 +40,8 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
 
         setState(() {
           if (data.containsKey('seriesMapProto')) {
-            seriesList = data['seriesMapProto'];
+            var seriesListData = data['seriesMapProto'] as List;
+            seriesList = seriesListData.map((item) => Series.fromJson(item)).toList();
           } else {
             seriesList = [];
             print('Error: seriesMapProto not found in response');
@@ -76,32 +78,25 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
                   itemCount: seriesList.length,
                   itemBuilder: (context, index) {
                     final seriesItem = seriesList[index];
-                    final seriesDate = seriesItem['date'];
-                    final series = seriesItem['series'];
-
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          seriesDate,
+                          seriesItem.date,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,
                           ),
                         ),
-                        ...series.map<Widget>((item) {
-                          final startDate = DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(item['startDt']));
-                          final endDate = DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(item['endDt']));
+                        ...seriesItem.series.map<Widget>((item) {
                           return ListTile(
-                            title: Text(item['name'] ?? 'No name'),
+                            title: Text(item.name),
                             subtitle: Text(
-                              'Start Date: $startDate',
+                              'Start Date: ${item.startDate}',
                             ),
                             trailing: Text(
-                              'End Date: $endDate',
+                              'End Date: ${item.endDate}',
                             ),
                           );
                         }).toList(),

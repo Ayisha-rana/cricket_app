@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 
 class RankingsPage extends StatefulWidget {
   @override
@@ -8,7 +10,7 @@ class RankingsPage extends StatefulWidget {
 }
 
 class _RankingsPageState extends State<RankingsPage> {
-  List _batsmen = [];
+  List<Batsman> _batsmen = [];
   bool _isLoading = true;
 
   @override
@@ -29,12 +31,13 @@ class _RankingsPageState extends State<RankingsPage> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print('aResponse data: $data'); // Print the response data for debugging
+        print('Response data: $data'); // Print the response data for debugging
 
         setState(() {
-          if (data is Map) {
-            // Access the 'rank' key
-            _batsmen = data['rank'] ?? [];
+          if (data is Map && data.containsKey('rank')) {
+            _batsmen = (data['rank'] as List)
+                .map((json) => Batsman.fromJson(json))
+                .toList();
           } else {
             print('Unexpected data format');
             _batsmen = [];
@@ -71,13 +74,9 @@ class _RankingsPageState extends State<RankingsPage> {
                 final batsman = _batsmen[index];
                 print('Batsman item: $batsman'); // Debugging
 
-                final name = batsman['name'] ?? 'No Name';
-                final rating = batsman['rating'] ?? 'No Rating';
-                final country = batsman['country'] ?? 'No Country';
-
                 return ListTile(
-                  title: Text(name),
-                  subtitle: Text('Rating: $rating\nCountry: $country'),
+                  title: Text(batsman.name),
+                  subtitle: Text('Rating: ${batsman.rating}\nCountry: ${batsman.country}'),
                 );
               },
             ),

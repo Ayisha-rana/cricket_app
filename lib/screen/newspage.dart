@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +9,8 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  List _news = [];
+  List<News> _news = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -31,16 +33,24 @@ class _NewsPageState extends State<NewsPage> {
 
       // Check the structure of the data and adjust accordingly
       if (data is Map) {
-        // Assume the list of news items is under a key 'topics' 
+        // Assume the list of news items is under a key 'topics'
         setState(() {
-          _news = data['topics'] ?? []; // Update this key based on actual structure
+          var newsListData = data['topics'] as List;
+          _news = newsListData.map((item) => News.fromJson(item)).toList();
+          _isLoading = false;
         });
       } else {
-        print('Uneaxpected data format');
+        print('Unexpected data format');
+        setState(() {
+          _isLoading = false;
+        });
       }
     } else {
       print('Failed to load data, status code: ${response.statusCode}');
       print('Response body: ${response.body}');
+      setState(() {
+        _isLoading = false;
+      });
       throw Exception('Failed to load data');
     }
   }
@@ -51,24 +61,21 @@ class _NewsPageState extends State<NewsPage> {
       appBar: AppBar(
         title: Text('Latest News'),
       ),
-      body: _news.isEmpty
+      body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _news.length,
-              itemBuilder: (context, index) {
-                final newsItem = _news[index];
-                print('News item: $newsItem'); 
+          : _news.isEmpty
+              ? Center(child: Text('No news available'))
+              : ListView.builder(
+                  itemCount: _news.length,
+                  itemBuilder: (context, index) {
+                    final newsItem = _news[index];
 
-                // Adjust these keys based on actual structure
-                final headline = newsItem['headline'] ?? 'No Title'; 
-                final intro = newsItem['description'] ?? 'No Description';
-
-                return ListTile(
-                  title: Text(headline),
-                  subtitle: Text(intro),
-                );
-              },
-            ),
+                    return ListTile(
+                      title: Text(newsItem.headline),
+                      subtitle: Text(newsItem.description),
+                    );
+                  },
+                ),
     );
   }
 }
