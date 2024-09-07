@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/newspage.dart';
 import 'package:cricket_app/screen/rankingspage.dart';
 import 'package:cricket_app/screen/schedulepage.dart';
 import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Homepage extends StatefulWidget {
   @override
@@ -14,7 +16,7 @@ class _HomePageState extends State<Homepage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const Center(child: Text('aScores')), 
+    RecentMatchesPage(), // Updated to include both recent matches and news
     MatchSchedulesScreen(),
     NewsPage(),
     RankingsPage(),
@@ -31,18 +33,18 @@ class _HomePageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-  backgroundColor: const Color.fromARGB(255, 91, 132, 93),
-  title: Text('s'),
-  actions: [
-    IconButton(
-      icon: Icon(Icons.more_vert),
-      onPressed: () {
-       Navigator.push(context, MaterialPageRoute(builder: (context)=>MorePage()));
-      },
-    ),
-  ],
-),
-
+        backgroundColor: const Color.fromARGB(255, 91, 132, 93),
+        title: Text('Cricket App'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MorePage()));
+            },
+          ),
+        ],
+      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -67,9 +69,9 @@ class _HomePageState extends State<Homepage> {
           ),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
-            type: BottomNavigationBarType.fixed, // Makes the items fixed
-            currentIndex: _currentIndex, // Current selected index
-            onTap: _onTap, // Change page on tap
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: _onTap,
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
@@ -92,16 +94,207 @@ class _HomePageState extends State<Homepage> {
                 label: 'Stats',
               ),
             ],
-            selectedItemColor: Colors.blueAccent, // Color for selected item
-            unselectedItemColor: Colors.grey, // Color for unselected items
-            selectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold), // Bold selected label
-            unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.normal), // Normal unselected label
-            iconSize: 28, // Size of the icons
-            elevation: 10, // Elevation effect
+            selectedItemColor: Colors.blueAccent,
+            unselectedItemColor: Colors.grey,
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            unselectedLabelStyle:
+                const TextStyle(fontWeight: FontWeight.normal),
+            iconSize: 28,
+            elevation: 10,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class RecentMatchesPage extends StatefulWidget {
+  @override
+  _RecentMatchesPageState createState() => _RecentMatchesPageState();
+}
+
+class _RecentMatchesPageState extends State<RecentMatchesPage> {
+  List recentMatches = [];
+  List newsHeadlines = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRecentMatches();
+    fetchNews();
+  }
+
+  Future<void> fetchRecentMatches() async {
+    final response = await http.get(
+      Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/matches/v1/recent'),
+      headers: {
+        'X-RapidAPI-Key': '366acfd63bmsh27e7e751a2f375ap1c5833jsn023e46aa6ce9',
+        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      List allMatches = [];
+
+      // Iterating over each series in the seriesMatches map
+      for (var series in data['typeMatches'][0]['seriesMatches']) {
+        if (series.containsKey('seriesAdWrapper')) {
+          var matches = series['seriesAdWrapper']['matches'];
+          allMatches.addAll(matches); // Add matches to allMatches list
+        }
+      }
+
+      setState(() {
+        recentMatches = allMatches;
+      });
+    } else {
+      throw Exception('Failed to load recent matches');
+    }
+  }
+
+  Future<void> fetchNews() async {
+    final response = await http.get(
+      Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/topics'),
+      headers: {
+        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
+        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      if (data is Map) {
+        setState(() {
+          // Limit to top 10 news items
+          newsHeadlines = (data['topics'] ?? []).take(10).toList();
+        });
+      } else {
+        print('Unexpected data format');
+      }
+    } else {
+      print('Failed to load news, status code: ${response.statusCode}');
+      throw Exception('Failed to load news');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              // Recent Matches
+              Container(
+                height: 250,
+                child: recentMatches.isEmpty
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal, // Horizontal ListView
+                        itemCount: recentMatches.length,
+                        itemBuilder: (context, index) {
+                          final match = recentMatches[index]['matchInfo'];
+                          final matchScore = recentMatches[index]['matchScore'];
+
+                          return Card(
+                            margin: EdgeInsets.all(10),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    match['matchDesc'],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Series: ${match['seriesName']}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    '${match['team1']['teamSName']} vs ${match['team2']['teamSName']}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Venue: ${match['venueInfo']['ground']}, ${match['venueInfo']['city']}',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Match Status: ${match['status']}',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ),
+              // News Headlines
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Text(
+                      'Top News',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 200,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          NewsPage();
+                        },
+                        child: Text('See All'))
+                  ],
+                ),
+              ),
+              Container(
+                child: newsHeadlines.isEmpty
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        shrinkWrap: true, // Adjust size to fit content
+                        physics:
+                            NeverScrollableScrollPhysics(), // Prevent scrolling
+                        itemCount: newsHeadlines.length,
+                        itemBuilder: (context, index) {
+                          final newsItem = newsHeadlines[index];
+                          final headline = newsItem['headline'] ?? 'No Title';
+                          final intro =
+                              newsItem['description'] ?? 'No Description';
+
+                          return ListTile(
+                            title: Text(headline),
+                            subtitle: Text(intro),
+                          );
+                        },
+                      ),
+              ),
+            ]),
+          ),
+        ],
       ),
     );
   }
