@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +9,7 @@ class MatchSchedulesScreen extends StatefulWidget {
 }
 
 class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
-  List<dynamic> schedules = [];
+  List<MatchSchedule> schedules = [];
   bool isLoading = true;
 
   @override
@@ -28,17 +29,30 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
     );
 
     if (response.statusCode == 200) {
-      print(response.body); // Print the response body for debugging
+      var data = json.decode(response.body);
+      var matchScheduleMap = data['matchScheduleMap'] ?? {};
+      
+      List<MatchSchedule> matchSchedules = [];
+      var scheduleAdWrapperList = matchScheduleMap['scheduleAdWrapper'] ?? [];
+      
+      for (var scheduleAdWrapper in scheduleAdWrapperList) {
+        var schedule = ScheduleAdWrapper.fromJson(scheduleAdWrapper);
+        var matchScheduleList = schedule.matchScheduleList;
+        
+        for (var matchSchedule in matchScheduleList) {
+          matchSchedules.add(MatchSchedule.fromJson(matchSchedule as Map<String, dynamic>));
+        }
+      }
+      
       setState(() {
-        var data = json.decode(response.body);
-        schedules = data['matchScheduleMap'] ?? [];
+        schedules = matchSchedules;
         isLoading = false;
       });
     } else {
       setState(() {
         isLoading = false;
       });
-      throw Exception('Faialed to load schedules');
+      throw Exception('Failed to load schedules');
     }
   }
 
@@ -53,22 +67,12 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
           : ListView.builder(
         itemCount: schedules.length,
         itemBuilder: (context, index) {
-          var schedule = schedules[index]['scheduleAdWrapper'] ?? {};
-          var matchScheduleList = schedule['matchScheduleList'] ?? [];
-
-          // Check if matchScheduleList is not empty
-          var seriesName = 'No Series Name'; // Default value
-          if (matchScheduleList.isNotEmpty) {
-            var firstMatch = matchScheduleList[0];
-            seriesName = firstMatch['seriesName'] ?? 'No Series Name';
-          }
-
-          var date = schedule['date'] ?? 'No Date Available';
+          var schedule = schedules[index];
 
           return Card(
             child: ListTile(
-              title: Text(seriesName),
-              subtitle: Text('Date: $date'),
+              title: Text(schedule.seriesName),
+              subtitle: Text('Date: ${schedule.date}'),
             ),
           );
         },

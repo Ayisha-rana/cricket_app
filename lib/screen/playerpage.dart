@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +11,7 @@ class Playerpage extends StatefulWidget {
 }
 
 class _PlayerpageState extends State<Playerpage> {
-  List<dynamic> _players = [];
+  List<Player> _players = [];
   bool _isLoading = true;
 
   @override
@@ -31,8 +32,12 @@ class _PlayerpageState extends State<Playerpage> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+      List<Player> players = (data['player'] as List)
+          .map((playerJson) => Player.fromJson(playerJson))
+          .toList();
+
       setState(() {
-        _players = data['player'];
+        _players = players;
         _isLoading = false;
       });
     } else {
@@ -61,10 +66,10 @@ class _PlayerpageState extends State<Playerpage> {
               itemCount: _players.length,
               itemBuilder: (context, index) {
                 final player = _players[index];
-                if (player['isHeader'] == true) {
+                if (player.isHeader) {
                   return ListTile(
                     title: Text(
-                      player['name'],
+                      player.name,
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     tileColor: Colors.grey[200],
@@ -72,11 +77,11 @@ class _PlayerpageState extends State<Playerpage> {
                 } else {
                   return ListTile(
                     title: Text(
-                      player['name'],
+                      player.name,
                       style: const TextStyle(fontSize: 16),
                     ),
                     subtitle: Text(
-                      '${player['role']}\nBatting Style: ${player['battingStyle']}\nBowling Style: ${player['bowlingStyle'] ?? 'N/A'}',
+                      '${player.role}\nBatting Style: ${player.battingStyle}\nBowling Style: ${player.bowlingStyle ?? 'N/A'}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   );

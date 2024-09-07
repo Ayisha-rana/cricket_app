@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Recordspage extends StatelessWidget {
   const Recordspage({super.key});
 
-  Future<Map<String, dynamic>> fetchStats() async {
+  Future<List<StatsCategory>> fetchStats() async {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/topstats'),
       headers: {
@@ -15,7 +16,11 @@ class Recordspage extends StatelessWidget {
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      final data = json.decode(response.body);
+      List<StatsCategory> categories = (data['statsTypesList'] as List)
+          .map((category) => StatsCategory.fromJson(category))
+          .toList();
+      return categories;
     } else {
       throw Exception('Failed to load stats');
     }
@@ -27,7 +32,7 @@ class Recordspage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Cricket Records'),
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<List<StatsCategory>>(
         future: fetchStats(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,17 +43,17 @@ class Recordspage extends StatelessWidget {
             return Center(child: Text('No data available'));
           }
 
-          final statsList = snapshot.data!['statsTypesList'];
+          final categories = snapshot.data!;
           return ListView.builder(
-            itemCount: statsList.length,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
-              final category = statsList[index];
+              final category = categories[index];
               return ExpansionTile(
-                title: Text(category['category']),
-                children: (category['types'] as List).map((stat) {
+                title: Text(category.category),
+                children: category.types.map((stat) {
                   return ListTile(
-                    title: Text(stat['header']),
-                    subtitle: Text(stat['category']),
+                    title: Text(stat.header),
+                    subtitle: Text(stat.category),
                   );
                 }).toList(),
               );
