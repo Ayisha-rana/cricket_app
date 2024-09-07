@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 // News Model
 class News {
   final String headline;
@@ -106,22 +104,26 @@ class NewsItem {
 class MatchSchedule {
   final String seriesName;
   final String date;
-  final MatchInfo matchInfo;
 
   MatchSchedule({
     required this.seriesName,
     required this.date,
-    required this.matchInfo,
   });
 
   factory MatchSchedule.fromJson(Map<String, dynamic> json) {
+    var matchScheduleList = json['scheduleAdWrapper']?['matchScheduleList'] ?? [];
+    String seriesName = matchScheduleList.isNotEmpty
+        ? matchScheduleList[0]['seriesName'] ?? 'No Series Name'
+        : 'No Series Name';
+    String date = json['scheduleAdWrapper']?['date'] ?? 'No Date Available';
+
     return MatchSchedule(
-      seriesName: json['seriesName'] ?? 'No Series Name',
-      date: json['date'] ?? 'No Date Available',
-      matchInfo: MatchInfo.fromJson(json['matchInfo'] ?? {}),
+      seriesName: seriesName,
+      date: date,
     );
   }
 }
+
 
 // Model for match info
 class MatchInfo {

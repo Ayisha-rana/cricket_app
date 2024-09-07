@@ -19,7 +19,8 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
   }
 
   Future<void> fetchMatchSchedules() async {
-    final String url = 'https://cricbuzz-cricket.p.rapidapi.com/schedule/v1/international';
+    final String url =
+        'https://cricbuzz-cricket.p.rapidapi.com/schedule/v1/international';
     final response = await http.get(
       Uri.parse(url),
       headers: {
@@ -29,23 +30,11 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
     );
 
     if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-      var matchScheduleMap = data['matchScheduleMap'] ?? {};
-      
-      List<MatchSchedule> matchSchedules = [];
-      var scheduleAdWrapperList = matchScheduleMap['scheduleAdWrapper'] ?? [];
-      
-      for (var scheduleAdWrapper in scheduleAdWrapperList) {
-        var schedule = ScheduleAdWrapper.fromJson(scheduleAdWrapper);
-        var matchScheduleList = schedule.matchScheduleList;
-        
-        for (var matchSchedule in matchScheduleList) {
-          matchSchedules.add(MatchSchedule.fromJson(matchSchedule as Map<String, dynamic>));
-        }
-      }
-      
       setState(() {
-        schedules = matchSchedules;
+        var data = json.decode(response.body)['matchScheduleMap'] ?? [];
+        schedules = data
+            .map<MatchSchedule>((json) => MatchSchedule.fromJson(json))
+            .toList();
         isLoading = false;
       });
     } else {
@@ -65,18 +54,18 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-        itemCount: schedules.length,
-        itemBuilder: (context, index) {
-          var schedule = schedules[index];
+              itemCount: schedules.length,
+              itemBuilder: (context, index) {
+                var schedule = schedules[index];
 
-          return Card(
-            child: ListTile(
-              title: Text(schedule.seriesName),
-              subtitle: Text('Date: ${schedule.date}'),
+                return Card(
+                  child: ListTile(
+                    title: Text(schedule.seriesName),
+                    subtitle: Text('Date: ${schedule.date}'),
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
