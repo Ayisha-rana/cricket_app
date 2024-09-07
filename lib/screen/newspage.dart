@@ -57,7 +57,7 @@ class _NewsPageState extends State<NewsPage> {
               itemCount: _news.length,
               itemBuilder: (context, index) {
                 final newsItem = _news[index];
-                print('News item: $newsItem'); // Print individual news item for debugging
+                print('News item: $newsItem'); 
 
                 // Adjust these keys based on actual structure
                 final headline = newsItem['headline'] ?? 'No Title'; 

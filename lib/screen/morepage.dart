@@ -1,4 +1,14 @@
+import 'package:cricket_app/screen/browseseriespage.dart';
+import 'package:cricket_app/screen/browseteampage.dart';
+import 'package:cricket_app/screen/feedbackpage.dart';
+import 'package:cricket_app/screen/photospage.dart';
+import 'package:cricket_app/screen/playerpage.dart';
+import 'package:cricket_app/screen/privacypolicy.dart';
+import 'package:cricket_app/screen/rankingspage.dart';
+import 'package:cricket_app/screen/recordspage.dart';
+import 'package:cricket_app/screen/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:cricket_app/screen/aboutuspage.dart';
 import 'package:cricket_app/screen/schedulepage.dart';
 
 class MorePage extends StatelessWidget {
@@ -26,24 +36,24 @@ class MorePage extends StatelessWidget {
     'ICC Ranking',
     'Photos',
     'Records',
-    'Setetings',
+    'Settings',
     'Feedback',
     'Privacy Policy',
     'About Us',
   ];
 
   final List<Widget> _pages = [
-    // BrowseSeriesPage(), // Define and uncomment these when available
-    // BrowseTeamPage(),
-    // BrowsePlayerPage(),
-    MatchSchedulesScreen(), // This corresponds to 'Schedule'
-    // ICCRankingPage(),
-    // PhotosPage(),
-    // RecordsPage(),
-    // SettingsPage(),
-    // FeedbackPage(),
-    // PrivacyPolicyPage(),
-    // AboutUsPage(),
+    // Replace these placeholders with actual pages when available
+    BrowseSeriesPage(),
+    TeamPage(),
+    Playerpage(),
+    MatchSchedulesScreen(), // Schedule page
+    RankingsPage(),
+    PhotosPage(), Recordspage(),
+    SettingsPage(),
+    FeedbackPage(),
+    PrivacyPolicyPage(), // FeedbackPage(),
+    AboutUsPage(), // About Us page
   ];
 
   @override
@@ -71,7 +81,8 @@ class MorePage extends StatelessWidget {
             child: SizedBox(
               height: 60,
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                 leading: Icon(
                   _icons[index],
                   color: Colors.black,
@@ -82,8 +93,10 @@ class MorePage extends StatelessWidget {
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                 ),
                 onTap: () {
-                  // Ensure the index is within the range of the _pages list
-                  if (index < _pages.length) {
+                  // Check if the corresponding page exists in the _pages list
+                  if (index < _pages.length &&
+                      _pages[index] != null &&
+                      _pages[index] is! Container) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -91,9 +104,9 @@ class MorePage extends StatelessWidget {
                       ),
                     );
                   } else {
-                    // Handle the case where there's no corresponding page
+                    // Show a message if the page is not yet available
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Page not available')),
+                      const SnackBar(content: Text('Page not available')),
                     );
                   }
                 },

@@ -10,45 +10,33 @@ class Playerpage extends StatefulWidget {
 }
 
 class _PlayerpageState extends State<Playerpage> {
-  List<dynamic> players = [];
-  bool isLoading = true;
-  String errorMessage = '';
+  List<dynamic> _players = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchPlayers();
+    _fetchPlayerData();
   }
 
-  Future<void> fetchPlayers() async {
-    final String url = 'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/player/search?plrN=Tucker';
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',  // Replace with your API key
-          'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
-        },
-      );
+  Future<void> _fetchPlayerData() async {
+    final url = 'https://cricbuzz-cricket.p.rapidapi.com/series/v1/3718/squads/15826';
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
+        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        setState(() {
-          var data = json.decode(response.body);
-          print(data); // Print data to check response structure
-          players = data['player'] ?? []; // Ensure this key exists in the response
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          errorMessage = 'Failed to load players: ${response.reasonPhrase}';
-          isLoading = false;
-        });
-      }
-    } catch (e) {
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
       setState(() {
-        errorMessage = 'Error: $e';
-        isLoading = false;
+        _players = data['player'];
+        _isLoading = false;
       });
+    } else {
+      throw Exception('Failed to load player data');
     }
   }
 
@@ -58,7 +46,7 @@ class _PlayerpageState extends State<Playerpage> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 85, 147, 88),
         title: const Text(
-          'Palayers',
+          'Players',
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
@@ -67,37 +55,34 @@ class _PlayerpageState extends State<Playerpage> {
           ),
         ),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : errorMessage.isNotEmpty
-              ? Center(child: Text(errorMessage))
-              : ListView.builder(
-                  padding: EdgeInsets.all(8.0),
-                  itemCount: players.length,
-                  itemBuilder: (context, index) {
-                    var player = players[index];
-                    var name = player['name'] ?? 'Unknown Player';
-                    var teamName = player['teamName'] ?? 'Unknown Team';
-                    var faceImageId = player['faceImageId'] ?? '';
-
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.all(8.0),
-                        leading: faceImageId.isNotEmpty
-                            ? Image.network(
-                                'https://cricbuzz-cricket.p.rapidapi.com/images/$faceImageId',
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                              )
-                            : Icon(Icons.person, size: 50),
-                        title: Text(name, style: TextStyle(fontSize: 18)),
-                        subtitle: Text(teamName, style: TextStyle(fontSize: 16)),
-                      ),
-                    );
-                  },
-                ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: _players.length,
+              itemBuilder: (context, index) {
+                final player = _players[index];
+                if (player['isHeader'] == true) {
+                  return ListTile(
+                    title: Text(
+                      player['name'],
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    tileColor: Colors.grey[200],
+                  );
+                } else {
+                  return ListTile(
+                    title: Text(
+                      player['name'],
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    subtitle: Text(
+                      '${player['role']}\nBatting Style: ${player['battingStyle']}\nBowling Style: ${player['bowlingStyle'] ?? 'N/A'}',
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  );
+                }
+              },
+            ),
     );
   }
 }
