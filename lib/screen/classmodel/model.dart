@@ -4,7 +4,7 @@ import 'dart:convert';
 class News {
   final String headline;
   final String description;
-//gghhjhhhh
+
   News({
     required this.headline,
     required this.description,
@@ -62,21 +62,156 @@ class SeriesDetail {
 
 // Player Model
 class Player {
-  final String fullName;
+  final String name;
   final String role;
   final String battingStyle;
+  final String? bowlingStyle;
+  final bool isHeader;
 
   Player({
-    required this.fullName,
+    required this.name,
     required this.role,
     required this.battingStyle,
+    this.bowlingStyle,
+    required this.isHeader,
   });
 
   factory Player.fromJson(Map<String, dynamic> json) {
     return Player(
-      fullName: json['fullName'] ?? 'Unknown',
-      role: json['role'] ?? 'Unknown Role',
-      battingStyle: json['battingStyle'] ?? 'N/A',
+      name: json['name'] ?? 'No Name',
+      role: json['role'] ?? 'No Role',
+      battingStyle: json['battingStyle'] ?? 'No Batting Style',
+      bowlingStyle: json['bowlingStyle'],
+      isHeader: json['isHeader'] ?? false,
+    );
+  }
+}
+
+// NewsItem Model
+class NewsItem {
+  final String headline;
+  final String description;
+
+  NewsItem({required this.headline, required this.description});
+
+  factory NewsItem.fromJson(Map<String, dynamic> json) {
+    return NewsItem(
+      headline: json['headline'] ?? 'No Title',
+      description: json['description'] ?? 'No Description',
+    );
+  }
+}
+
+// Model for individual match schedule
+class MatchSchedule {
+  final String seriesName;
+  final String date;
+  final MatchInfo matchInfo;
+
+  MatchSchedule({
+    required this.seriesName,
+    required this.date,
+    required this.matchInfo,
+  });
+
+  factory MatchSchedule.fromJson(Map<String, dynamic> json) {
+    return MatchSchedule(
+      seriesName: json['seriesName'] ?? 'No Series Name',
+      date: json['date'] ?? 'No Date Available',
+      matchInfo: MatchInfo.fromJson(json['matchInfo'] ?? {}),
+    );
+  }
+}
+
+// Model for match info
+class MatchInfo {
+  final String matchDesc;
+  final String seriesName;
+  final String team1Name;
+  final String team2Name;
+  final String venue;
+  final String city;
+  final String status;
+
+  MatchInfo({
+    required this.matchDesc,
+    required this.seriesName,
+    required this.team1Name,
+    required this.team2Name,
+    required this.venue,
+    required this.city,
+    required this.status,
+  });
+
+  factory MatchInfo.fromJson(Map<String, dynamic> json) {
+    return MatchInfo(
+      matchDesc: json['matchDesc'] ?? 'No Description',
+      seriesName: json['seriesName'] ?? 'No Series Name',
+      team1Name: json['team1']['teamSName'] ?? 'No Team 1',
+      team2Name: json['team2']['teamSName'] ?? 'No Team 2',
+      venue: json['venueInfo']['ground'] ?? 'No Ground',
+      city: json['venueInfo']['city'] ?? 'No City',
+      status: json['status'] ?? 'No Status',
+    );
+  }
+}
+
+// Model for schedule ad wrapper
+class ScheduleAdWrapper {
+  final List<MatchSchedule> matchScheduleList;
+
+  ScheduleAdWrapper({required this.matchScheduleList});
+
+  factory ScheduleAdWrapper.fromJson(Map<String, dynamic> json) {
+    return ScheduleAdWrapper(
+      matchScheduleList: (json['matchScheduleList'] as List)
+          .map((item) => MatchSchedule.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+// Model for the schedule response
+class MatchSchedulesResponse {
+  final Map<String, dynamic> matchScheduleMap;
+
+  MatchSchedulesResponse({required this.matchScheduleMap});
+
+  factory MatchSchedulesResponse.fromJson(Map<String, dynamic> json) {
+    return MatchSchedulesResponse(
+      matchScheduleMap: json['matchScheduleMap'] ?? {},
+    );
+  }
+}
+
+// Model for statistics category
+class StatsCategory {
+  final String category;
+  final List<StatsType> types;
+
+  StatsCategory({required this.category, required this.types});
+
+  factory StatsCategory.fromJson(Map<String, dynamic> json) {
+    return StatsCategory(
+      category: json['category'] ?? 'No Category',
+      types: (json['types'] as List)
+          .map((type) => StatsType.fromJson(type))
+          .toList(),
+    );
+  }
+}
+
+// Model for statistics type
+class StatsType {
+  final String header;
+  final String category;
+
+  StatsType({required this.header, required this.category});
+
+  factory StatsType.fromJson(Map<String, dynamic> json) {
+    return StatsType(
+      header: json['header'] ?? 'No Header',
+      category: json['category'] ?? 'No Category',
     );
   }
 }
