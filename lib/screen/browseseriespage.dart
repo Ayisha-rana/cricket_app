@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:cricket_app/screen/classmodel/model.dart';
 
 class BrowseSeriesPage extends StatefulWidget {
   const BrowseSeriesPage({super.key});
@@ -11,7 +11,7 @@ class BrowseSeriesPage extends StatefulWidget {
 }
 
 class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
-  List<Series> seriesList = [];
+  List<SeriesData> seriesList = [];
   bool isLoading = true;
 
   @override
@@ -35,13 +35,18 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        // Debugging: Print the API response to check the structure
         print(data);
 
         setState(() {
           if (data.containsKey('seriesMapProto')) {
             var seriesListData = data['seriesMapProto'] as List;
-            seriesList = seriesListData.map((item) => Series.fromJson(item)).toList();
+            seriesList = seriesListData.map((item) {
+              final seriesDate = item['date'];
+              final series = (item['series'] as List)
+                  .map((seriesItem) => Series.fromJson(seriesItem))
+                  .toList();
+              return SeriesData(date: seriesDate, series: series);
+            }).toList();
           } else {
             seriesList = [];
             print('Error: seriesMapProto not found in response');
@@ -77,19 +82,19 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
                   padding: const EdgeInsets.all(8),
                   itemCount: seriesList.length,
                   itemBuilder: (context, index) {
-                    final seriesItem = seriesList[index];
+                    final seriesData = seriesList[index];
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          seriesItem.date,
+                          seriesData.date,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,
                           ),
                         ),
-                        ...seriesItem.series.map<Widget>((item) {
+                        ...seriesData.series.map<Widget>((item) {
                           return ListTile(
                             title: Text(item.name),
                             subtitle: Text(

@@ -261,7 +261,7 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
                       ),
                     ),
                     SizedBox(
-                      width: 200,
+                      width: 170,
                     ),
                     TextButton(
                         onPressed: () {

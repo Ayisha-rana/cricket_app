@@ -1,4 +1,5 @@
 import 'package:cricket_app/screen/homePage.dart';
+import 'package:cricket_app/screen/splashscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  Homepage(),
+      home:  Splashscreen(),
     );
   }
 }

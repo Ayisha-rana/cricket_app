@@ -2,33 +2,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class StatsCategory {
-  final String category;
-  final List<StatsType> types;
+class TeamStanding {
+  final String rank;
+  final String team;
+  final String pct;
 
-  StatsCategory({required this.category, required this.types});
+  TeamStanding({required this.rank, required this.team, required this.pct});
 
-  factory StatsCategory.fromJson(Map<String, dynamic> json) {
-    return StatsCategory(
-      category: json['category'] ?? 'No Category',
-      types: (json['types'] as List)
-          .map((type) => StatsType.fromJson(type))
-          .toList(),
-    );
-  }
-}
-
-// Model class for StatsType
-class StatsType {
-  final String header;
-  final String category;
-
-  StatsType({required this.header, required this.category});
-
-  factory StatsType.fromJson(Map<String, dynamic> json) {
-    return StatsType(
-      header: json['header'] ?? 'No Header',
-      category: json['category'] ?? 'No Category',
+  factory TeamStanding.fromJson(List<dynamic> json) {
+    return TeamStanding(
+      rank: json[0] ?? 'No Rank',
+      team: json[2] ?? 'No Team',
+      pct: json[3] ?? 'No PCT',
     );
   }
 }
@@ -39,7 +24,7 @@ class StatsScreen extends StatefulWidget {
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-  List<StatsCategory> standings = [];
+  List<TeamStanding> standings = [];
   bool isLoading = true;
 
   @override
@@ -62,9 +47,10 @@ class _StatsScreenState extends State<StatsScreen> {
       try {
         var data = json.decode(response.body);
         print('Decoded JSON data: $data'); // Print decoded JSON data
+        
         setState(() {
           standings = (data['values'] as List)
-              .map((item) => StatsCategory.fromJson(item))
+              .map((item) => TeamStanding.fromJson(item['value']))
               .toList();
           isLoading = false;
         });
@@ -87,7 +73,7 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stats and Records'),
+        title: Text('Team Standings'),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -96,16 +82,12 @@ class _StatsScreenState extends State<StatsScreen> {
               : ListView.builder(
                   itemCount: standings.length,
                   itemBuilder: (context, index) {
-                    final category = standings[index];
+                    final standing = standings[index];
 
-                    return ExpansionTile(
-                      title: Text(category.category),
-                      children: category.types.map((type) {
-                        return ListTile(
-                          title: Text(type.header),
-                          subtitle: Text(type.category),
-                        );
-                      }).toList(),
+                    return ListTile(
+                      leading: Text(standing.rank),
+                      title: Text(standing.team),
+                      trailing: Text(standing.pct),
                     );
                   },
                 ),

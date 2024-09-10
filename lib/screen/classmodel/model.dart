@@ -18,47 +18,49 @@ class News {
 
 // Series Model
 class Series {
-  final String date;
-  final List<SeriesDetail> series;
+  final int id;
+  final String name;
+  final String startDt;
+  final String endDt;
+  final bool isFantasyHandbookEnabled;
 
   Series({
-    required this.date,
-    required this.series,
+    required this.id,
+    required this.name,
+    required this.startDt,
+    required this.endDt,
+    this.isFantasyHandbookEnabled = false,
   });
 
   factory Series.fromJson(Map<String, dynamic> json) {
-    var seriesList = json['series'] as List;
-    List<SeriesDetail> seriesDetails = seriesList.map((i) => SeriesDetail.fromJson(i)).toList();
-
     return Series(
-      date: json['date'] ?? 'Unknown Date',
-      series: seriesDetails,
+      id: json['id'],
+      name: json['name'],
+      startDt: json['startDt'],
+      endDt: json['endDt'],
+      isFantasyHandbookEnabled: json['isFantasyHandbookEnabled'] ?? false,
     );
+  }
+
+  String get startDate => _formatDate(startDt);
+  String get endDate => _formatDate(endDt);
+
+  String _formatDate(String timestamp) {
+    final date = DateTime.fromMillisecondsSinceEpoch(int.parse(timestamp));
+    return '${date.day}-${date.month}-${date.year}';
   }
 }
 
-// SeriesDetail Model
-class SeriesDetail {
-  final String name;
-  final DateTime startDate;
-  final DateTime endDate;
+class SeriesData {
+  final String date;
+  final List<Series> series;
 
-  SeriesDetail({
-    required this.name,
-    required this.startDate,
-    required this.endDate,
+  SeriesData({
+    required this.date,
+    required this.series,
   });
-
-  factory SeriesDetail.fromJson(Map<String, dynamic> json) {
-    return SeriesDetail(
-      name: json['name'] ?? 'No Name',
-      startDate: DateTime.parse(json['startDt'] ?? '1970-01-01T00:00:00Z'), // Use ISO 8601 format
-      endDate: DateTime.parse(json['endDt'] ?? '1970-01-01T00:00:00Z'),
-    );
-  }
 }
 
-// Player Model
 class Player {
   final String name;
   final String role;
