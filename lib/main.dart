@@ -10,13 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cricket App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home:  Splashscreen(),
+      home: Splashscreen(),
     );
   }
 }
-
-

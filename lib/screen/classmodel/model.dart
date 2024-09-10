@@ -1,20 +1,19 @@
-// News Model
 class News {
   final String headline;
   final String description;
+  final String? content; // Make sure content is nullable.
 
-  News({
-    required this.headline,
-    required this.description,
-  });
+  News({required this.headline, required this.description, this.content});
 
   factory News.fromJson(Map<String, dynamic> json) {
     return News(
-      headline: json['headline'] ?? 'No Title',
-      description: json['description'] ?? 'No Description',
+      headline: json['headline'] as String,
+      description: json['description'] as String,
+      content: json['content'] as String?, // Ensure content can be null.
     );
   }
 }
+
 
 // Series Model
 class Series {
