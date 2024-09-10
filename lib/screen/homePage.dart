@@ -32,19 +32,7 @@ class _HomePageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 91, 132, 93),
-        title: Text('Cricket App'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MorePage()));
-            },
-          ),
-        ],
-      ),
+     
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -182,7 +170,20 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 94, 160, 115),
+        title: Text('Cricket App',style: TextStyle(color: Colors.white),),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MorePage()));
+            },
+          ),
+        ],
+      ),
       body: CustomScrollView(
         slivers: [
           SliverList(
@@ -193,61 +194,95 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
                 child: recentMatches.isEmpty
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
-                        scrollDirection: Axis.horizontal, // Horizontal ListView
+                        scrollDirection: Axis.horizontal,
                         itemCount: recentMatches.length,
                         itemBuilder: (context, index) {
                           final match = recentMatches[index]['matchInfo'];
                           final matchScore = recentMatches[index]['matchScore'];
 
-                          return Card(
-                            margin: EdgeInsets.all(10),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    match['matchDesc'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                          return Container(
+                            width: 300, // Adjust the width for better spacing
+                            child: Card(
+                              color:Color.fromARGB(255, 251, 255, 252) ,
+                              elevation: 5, // Adds shadow for depth
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    15), // Rounded corners
+                              ),
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 10),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      match['matchDesc'],
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Series: ${match['seriesName']}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueAccent,
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Series: ${match['seriesName']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.blueAccent,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    '${match['team1']['teamSName']} vs ${match['team2']['teamSName']}',
-                                    style: TextStyle(
-                                      fontSize: 16,
+                                    SizedBox(height: 8),
+                                    Text(
+                                      '${match['team1']['teamSName']} vs ${match['team2']['teamSName']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black87,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Venue: ${match['venueInfo']['ground']}, ${match['venueInfo']['city']}',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    'Match Status: ${match['status']}',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontStyle: FontStyle.italic,
+                                    SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Colors.redAccent,
+                                          size: 16,
+                                        ),
+                                        SizedBox(width: 5),
+                                        Expanded(
+                                          child: Text(
+                                            '${match['venueInfo']['ground']}, ${match['venueInfo']['city']}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey[700],
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(height: 8),
+                                    Text(
+                                      'Status: ${match['status']}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.green,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
                         },
                       ),
               ),
+
               // News Headlines
               Container(
                 padding: EdgeInsets.all(10),
