@@ -24,7 +24,7 @@ class _NewsPageState extends State<NewsPage> {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/topics'),
       headers: {
-        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
+        'X-RapidAPI-Key': '366acfd63bmsh27e7e751a2f375ap1c5833jsn023e46aa6ce9',
         'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
       },
     );
