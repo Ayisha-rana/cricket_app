@@ -14,12 +14,10 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     super.initState();
     
-    // Set a timer for the splash screen duration
     Timer(const Duration(seconds: 3), () {
-      // After the timer ends, navigate to the next page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  Homepage ()), // Replace 'NextPage' with your next screen
+        MaterialPageRoute(builder: (context) =>  Homepage ()), 
       );
     });
   }
