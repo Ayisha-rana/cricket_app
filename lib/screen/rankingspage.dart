@@ -21,6 +21,7 @@ class _RankingsPageState extends State<RankingsPage> {
 
   Future<void> fetchBatsmenRankings() async {
     try {
+      
       final response = await http.get(
         Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/batsmen?formatType=test'),
         headers: {

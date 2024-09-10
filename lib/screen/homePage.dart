@@ -32,7 +32,6 @@ class _HomePageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: _pages[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -170,9 +169,13 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 94, 160, 115),
-        title: Text('Cricket App',style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Cricket App',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -203,7 +206,7 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
                           return Container(
                             width: 300, // Adjust the width for better spacing
                             child: Card(
-                              color:Color.fromARGB(255, 251, 255, 252) ,
+                              color: Color.fromARGB(255, 251, 255, 252),
                               elevation: 5, // Adds shadow for depth
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
@@ -307,12 +310,12 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
                 ),
               ),
               Container(
+                padding: EdgeInsets.all(15.0), // Adds padding to the container
                 child: newsHeadlines.isEmpty
                     ? Center(child: CircularProgressIndicator())
                     : ListView.builder(
-                        shrinkWrap: true, // Adjust size to fit content
-                        physics:
-                            NeverScrollableScrollPhysics(), // Prevent scrolling
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: newsHeadlines.length,
                         itemBuilder: (context, index) {
                           final newsItem = newsHeadlines[index];
@@ -320,9 +323,37 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
                           final intro =
                               newsItem['description'] ?? 'No Description';
 
-                          return ListTile(
-                            title: Text(headline),
-                            subtitle: Text(intro),
+                          return Card(
+                            color: Color.fromARGB(255, 251, 255, 252),
+                            elevation: 3,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 8.0), // Spacing between cards
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10), // Rounded corners for the card
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(
+                                  10), // Adds padding inside the tile
+                              title: Text(
+                                headline,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  intro,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ),
+                            ),
                           );
                         },
                       ),
