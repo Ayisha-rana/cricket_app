@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:cricket_app/screen/rapidApi.dart';
+import 'package:cricket_app/utilspage/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cricket_app/screen/classmodel/model.dart';

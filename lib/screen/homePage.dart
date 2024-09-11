@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/newspage.dart';
 import 'package:cricket_app/screen/rankingspage.dart';
-import 'package:cricket_app/screen/rapidApi.dart';
+import 'package:cricket_app/utilspage/rapidApi.dart';
 import 'package:cricket_app/screen/schedulepage.dart';
 import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';

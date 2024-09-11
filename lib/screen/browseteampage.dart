@@ -1,5 +1,5 @@
 import 'dart:convert'; // For JSON decoding
-import 'package:cricket_app/screen/rapidApi.dart';
+import 'package:cricket_app/utilspage/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
