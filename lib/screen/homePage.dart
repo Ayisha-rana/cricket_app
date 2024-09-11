@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/newspage.dart';
 import 'package:cricket_app/screen/rankingspage.dart';
+import 'package:cricket_app/screen/rapidApi.dart';
 import 'package:cricket_app/screen/schedulepage.dart';
 import 'package:cricket_app/screen/statspage.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +82,7 @@ class _HomePageState extends State<Homepage> {
                 label: 'Stats',
               ),
             ],
-            selectedItemColor: Colors.blueAccent,
+            selectedItemColor: Color.fromARGB(255, 94, 160, 115),
             unselectedItemColor: Colors.grey,
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
             unselectedLabelStyle:
@@ -115,8 +116,8 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/matches/v1/recent'),
       headers: {
-        'X-RapidAPI-Key': '366acfd63bmsh27e7e751a2f375ap1c5833jsn023e46aa6ce9',
-        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
+        'X-RapidAPI-Key':  ApiConfig.rapidApiKey,
+        'X-RapidAPI-Host':  ApiConfig.rapidApiHost,
       },
     );
 
@@ -145,8 +146,8 @@ class _RecentMatchesPageState extends State<RecentMatchesPage> {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/topics'),
       headers: {
-        'X-RapidAPI-Key': '366acfd63bmsh27e7e751a2f375ap1c5833jsn023e46aa6ce9',
-        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
+        'X-RapidAPI-Key': ApiConfig.rapidApiKey,
+        'X-RapidAPI-Host': ApiConfig.rapidApiHost
       },
     );
 

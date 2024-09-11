@@ -24,7 +24,7 @@ class _NewsPageState extends State<NewsPage> {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/topics'),
       headers: {
-        'X-RapidAPI-Key': '366acfd63bmsh27e7e751a2f375ap1c5833jsn023e46aa6ce9',
+        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
         'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
       },
     );
@@ -57,6 +57,7 @@ class _NewsPageState extends State<NewsPage> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 94, 160, 115),
         title: Text('Latest News'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -72,6 +73,7 @@ class _NewsPageState extends State<NewsPage> {
           : _news.isEmpty
               ? Center(child: Text('No news available'))
               : ListView.builder(
+                
                   itemCount: _news.length,
                   itemBuilder: (context, index) {
                     final newsItem = _news[index];
@@ -86,6 +88,7 @@ class _NewsPageState extends State<NewsPage> {
                         );
                       },
                       child: Card(
+                        color: Color.fromARGB(255, 251, 255, 252),
                         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),

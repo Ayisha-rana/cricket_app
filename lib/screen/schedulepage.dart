@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cricket_app/screen/classmodel/model.dart';
+import 'package:cricket_app/screen/morepage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,7 +25,7 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
+        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
         'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
       },
     );
@@ -49,7 +50,18 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 94, 160, 115),
         title: Text('Match Schedules'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MorePage()));
+            },
+          ),
+        ],
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -59,9 +71,33 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
                 var schedule = schedules[index];
 
                 return Card(
-                  child: ListTile(
-                    title: Text(schedule.seriesName),
-                    subtitle: Text('Date: ${schedule.date}'),
+                  color: Color.fromARGB(255, 251, 255, 252),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      child: ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              schedule.seriesName,
+                              style: TextStyle(
+                                  fontSize:
+                                      20), // Optionally increase text size
+                            ),
+                            SizedBox(
+                                height:
+                                    10), // Add space between series name and date
+                            Text(
+                              'Date: ${schedule.date}',
+                              style: TextStyle(
+                                  fontSize:
+                                      16), // Optionally increase subtitle size
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
