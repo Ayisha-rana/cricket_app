@@ -1,24 +1,11 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class TeamStanding {
-  final String rank;
-  final String team;
-  final String pct;
 
-  TeamStanding({required this.rank, required this.team, required this.pct});
-
-  factory TeamStanding.fromJson(List<dynamic> json) {
-    return TeamStanding(
-      rank: json[0] ?? 'No Rank',
-      team: json[2] ?? 'No Team',
-      pct: json[3] ?? 'No PCT',
-    );
-  }
-}
 
 class StatsScreen extends StatefulWidget {
   @override

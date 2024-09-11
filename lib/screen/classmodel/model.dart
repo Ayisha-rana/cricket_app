@@ -264,3 +264,18 @@ class Team {
   }
 }
 //changes
+class TeamStanding {
+  final String rank;
+  final String team;
+  final String pct;
+
+  TeamStanding({required this.rank, required this.team, required this.pct});
+
+  factory TeamStanding.fromJson(List<dynamic> json) {
+    return TeamStanding(
+      rank: json[0] ?? 'No Rank',
+      team: json[2] ?? 'No Team',
+      pct: json[3] ?? 'No PCT',
+    );
+  }
+}
