@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cricket_app/screen/classmodel/model.dart';
 import 'package:cricket_app/screen/morepage.dart';
 import 'package:cricket_app/screen/newsdetails.dart';
+import 'package:cricket_app/screen/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,8 +25,8 @@ class _NewsPageState extends State<NewsPage> {
     final response = await http.get(
       Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/news/v1/topics'),
       headers: {
-        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
-        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com'
+        'X-RapidAPI-Key':  ApiConfig.rapidApiKey,
+        'X-RapidAPI-Host':  ApiConfig.rapidApiHost
       },
     );
 

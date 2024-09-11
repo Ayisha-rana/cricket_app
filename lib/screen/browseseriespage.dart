@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cricket_app/screen/classmodel/model.dart';
@@ -25,8 +26,8 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
         'https://cricbuzz-cricket.p.rapidapi.com/series/v1/international';
 
     final headers = {
-      'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
-      'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
+      'X-RapidAPI-Key':  ApiConfig.rapidApiKey,
+      'X-RapidAPI-Host':  ApiConfig.rapidApiHost,
     };
 
     try {

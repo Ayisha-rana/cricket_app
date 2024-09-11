@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cricket_app/screen/classmodel/model.dart';
+import 'package:cricket_app/screen/rapidApi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,8 +27,8 @@ class _PlayerpageState extends State<Playerpage> {
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
-        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
+        'X-RapidAPI-Host':  ApiConfig.rapidApiKey,
+        'X-RapidAPI-Key': ApiConfig.rapidApiHost,
       },
     );
 
