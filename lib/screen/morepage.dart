@@ -64,12 +64,13 @@ class MorePage extends StatelessWidget {
         title: const Text(
           'More',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 25,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
           ),
         ),
+        centerTitle: true,
       ),
       backgroundColor: Colors.grey[200],
       body: ListView.builder(

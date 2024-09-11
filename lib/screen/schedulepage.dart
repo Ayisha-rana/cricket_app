@@ -26,8 +26,8 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'X-RapidAPI-Key':  ApiConfig.rapidApiKey,
-        'X-RapidAPI-Host':  ApiConfig.rapidApiHost,
+        'X-RapidAPI-Key': ApiConfig.rapidApiKey,
+        'X-RapidAPI-Host': ApiConfig.rapidApiHost,
       },
     );
 
@@ -51,12 +51,12 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 94, 160, 115),
-        title: Text('Match Schedules'),
+        backgroundColor: const Color.fromARGB(255, 94, 160, 115),
+        title: const Text('Match Schedules'),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => MorePage()));
@@ -65,38 +65,41 @@ class _MatchSchedulesScreenState extends State<MatchSchedulesScreen> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: schedules.length,
               itemBuilder: (context, index) {
                 var schedule = schedules[index];
 
                 return Card(
-                  color: Color.fromARGB(255, 251, 255, 252),
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: const Color.fromARGB(255, 251, 255, 252),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      child: ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              schedule.seriesName,
-                              style: TextStyle(
-                                  fontSize:
-                                      20), // Optionally increase text size
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListTile(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            schedule.seriesName,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                            SizedBox(
-                                height:
-                                    10), // Add space between series name and date
-                            Text(
-                              'Date: ${schedule.date}',
-                              style: TextStyle(
-                                  fontSize:
-                                      16), // Optionally increase subtitle size
+                          ),
+                          const SizedBox(height: 8), // Space between series name and date
+                          Text(
+                            'Date: ${schedule.date}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
