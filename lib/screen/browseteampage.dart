@@ -1,7 +1,6 @@
-import 'dart:convert'; // For JSON decoding
-import 'package:cricket_app/utilspage/rapidApi.dart';
+// lib/team_page.dart
+import 'package:cricket_app/servicePage/apifunctions.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class TeamPage extends StatefulWidget {
   const TeamPage({super.key});
@@ -22,30 +21,17 @@ class _TeamPageState extends State<TeamPage> {
   }
 
   Future<void> fetchTeamData() async {
-    const String apiUrl =
-        'https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/35878/team/9';
-
-    final headers = {
-      'X-RapidAPI-Key':  ApiConfig.rapidApiKey,
-      'X-RapidAPI-Host':  ApiConfig.rapidApiHost,
-    };
+    TeamService teamService = TeamService();
 
     try {
-      final response = await http.get(Uri.parse(apiUrl), headers: headers);
+      final data = await teamService.fetchTeamData();
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-
-        setState(() {
-          playingXI = data['players']['playing XI'] ?? [];
-          bench = data['players']['bench'] ?? [];
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load team data');
-      }
+      setState(() {
+        playingXI = data['players']['playing XI'] ?? [];
+        bench = data['players']['bench'] ?? [];
+        isLoading = false;
+      });
     } catch (error) {
-      // Print error and show error message
       print('Error: $error');
       setState(() {
         isLoading = false;
@@ -71,7 +57,7 @@ class _TeamPageState extends State<TeamPage> {
               children: [
                 const Text(
                   'Playing XI',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.green),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
                 ...playingXI.map((player) => Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -80,15 +66,18 @@ class _TeamPageState extends State<TeamPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListTile(
-                        title: Text(player['fullName'] ?? 'Unknown',),
+                        title: Text(player['fullName'] ?? 'Unknown'),
                         subtitle: Text(player['role'] ?? 'Unknown Role'),
-                        trailing: Text(player['battingStyle'] ?? 'N/A',style: TextStyle(color: Colors.blue),),
+                        trailing: Text(
+                          player['battingStyle'] ?? 'N/A',
+                          style: const TextStyle(color: Colors.blue),
+                        ),
                       ),
                     )),
                 const SizedBox(height: 16),
                 const Text(
                   'Bench',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.green),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
                 ),
                 ...bench.map((player) => Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
