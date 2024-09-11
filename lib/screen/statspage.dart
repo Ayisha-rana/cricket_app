@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cricket_app/screen/morepage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,11 +35,12 @@ class _StatsScreenState extends State<StatsScreen> {
   }
 
   Future<void> fetchStandings() async {
-    final String url = 'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/iccstanding/team/matchtype/1';
+    final String url =
+        'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/iccstanding/team/matchtype/1';
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
+        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
         'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
       },
     );
@@ -47,7 +49,7 @@ class _StatsScreenState extends State<StatsScreen> {
       try {
         var data = json.decode(response.body);
         print('Decoded JSON data: $data'); // Print decoded JSON data
-        
+
         setState(() {
           standings = (data['values'] as List)
               .map((item) => TeamStanding.fromJson(item['value']))
@@ -73,7 +75,18 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MorePage()));
+            },
+          ),
+        ],
+        backgroundColor: const Color.fromARGB(255, 94, 160, 115),
         title: Text('Team Standings'),
+        centerTitle: true,
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
@@ -84,10 +97,35 @@ class _StatsScreenState extends State<StatsScreen> {
                   itemBuilder: (context, index) {
                     final standing = standings[index];
 
-                    return ListTile(
-                      leading: Text(standing.rank),
-                      title: Text(standing.team),
-                      trailing: Text(standing.pct),
+                    return Card(
+                      color: Color.fromARGB(255, 251, 255, 252),
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(16),
+                        leading: CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Color.fromARGB(255, 94, 160, 115),
+                          child: Text(
+                            standing.rank,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        title: Text(
+                          standing.team,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        trailing: Text(
+                          standing.pct,
+                          style: TextStyle(color: Colors.blue[600]),
+                        ),
+                      ),
                     );
                   },
                 ),

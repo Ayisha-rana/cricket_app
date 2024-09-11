@@ -8,7 +8,7 @@ class FeedbackPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Feedback'),
-        backgroundColor: const Color.fromARGB(255, 154, 205, 155),
+        backgroundColor: const Color.fromARGB(255, 148, 221, 151), // Cricbuzz color
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

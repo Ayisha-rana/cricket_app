@@ -25,7 +25,7 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
         'https://cricbuzz-cricket.p.rapidapi.com/series/v1/international';
 
     final headers = {
-      'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
+      'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
       'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
     };
 
@@ -70,8 +70,10 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: const Text('International Series'),
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 85, 147, 88),
       ),
       body: isLoading
@@ -91,17 +93,29 @@ class _BrowseSeriesPageState extends State<BrowseSeriesPage> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue,
+                            color: Colors.green,
                           ),
                         ),
                         ...seriesData.series.map<Widget>((item) {
-                          return ListTile(
-                            title: Text(item.name),
-                            subtitle: Text(
-                              'Start Date: ${item.startDate}',
+                          return Card(
+                              color: Color.fromARGB(255, 251, 255, 252),
+
+                            margin: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            trailing: Text(
-                              'End Date: ${item.endDate}',
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                title: Text(item.name),
+                                subtitle: Text(
+                                  'Start Date: ${item.startDate}',
+                                ),
+                                trailing: Text(
+                                  'End Date: ${item.endDate}',
+                                style: TextStyle(color: Colors.blue),),
+                              ),
                             ),
                           );
                         }).toList(),

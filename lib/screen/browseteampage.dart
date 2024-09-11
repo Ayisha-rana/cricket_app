@@ -24,9 +24,8 @@ class _TeamPageState extends State<TeamPage> {
     const String apiUrl =
         'https://cricbuzz-cricket.p.rapidapi.com/mcenter/v1/35878/team/9';
 
-    // Replace with your RapidAPI headers
     final headers = {
-      'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58', // Add your RapidAPI Key
+      'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
       'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
     };
 
@@ -61,6 +60,7 @@ class _TeamPageState extends State<TeamPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Team Players'),
+        centerTitle: true,
         backgroundColor: const Color.fromARGB(255, 85, 147, 88),
       ),
       body: isLoading
@@ -70,22 +70,36 @@ class _TeamPageState extends State<TeamPage> {
               children: [
                 const Text(
                   'Playing XI',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.green),
                 ),
-                ...playingXI.map((player) => ListTile(
-                      title: Text(player['fullName'] ?? 'Unknown'),
-                      subtitle: Text(player['role'] ?? 'Unknown Role'),
-                      trailing: Text(player['battingStyle'] ?? 'N/A'),
+                ...playingXI.map((player) => Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        title: Text(player['fullName'] ?? 'Unknown',),
+                        subtitle: Text(player['role'] ?? 'Unknown Role'),
+                        trailing: Text(player['battingStyle'] ?? 'N/A',style: TextStyle(color: Colors.blue),),
+                      ),
                     )),
                 const SizedBox(height: 16),
                 const Text(
                   'Bench',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.green),
                 ),
-                ...bench.map((player) => ListTile(
-                      title: Text(player['fullName'] ?? 'Unknown'),
-                      subtitle: Text(player['role'] ?? 'Unknown Role'),
-                      trailing: Text(player['battingStyle'] ?? 'N/A'),
+                ...bench.map((player) => Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        title: Text(player['fullName'] ?? 'Unknown'),
+                        subtitle: Text(player['role'] ?? 'Unknown Role'),
+                        trailing: Text(player['battingStyle'] ?? 'N/A'),
+                      ),
                     )),
               ],
             ),

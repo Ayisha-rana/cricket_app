@@ -7,8 +7,9 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 94, 160, 115),
+
         title: Text('Settings'),
-        backgroundColor: const Color.fromARGB(255, 148, 221, 151), // Cricbuzz color
       ),
       body: ListView(
         padding: EdgeInsets.all(16.0),

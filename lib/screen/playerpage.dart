@@ -21,12 +21,13 @@ class _PlayerpageState extends State<Playerpage> {
   }
 
   Future<void> _fetchPlayerData() async {
-    final url = 'https://cricbuzz-cricket.p.rapidapi.com/series/v1/3718/squads/15826';
+    final url =
+        'https://cricbuzz-cricket.p.rapidapi.com/series/v1/3718/squads/15826';
     final response = await http.get(
       Uri.parse(url),
       headers: {
         'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
-        'X-RapidAPI-Key': '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
+        'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1',
       },
     );
 
@@ -53,12 +54,13 @@ class _PlayerpageState extends State<Playerpage> {
         title: const Text(
           'Players',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 25,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
           ),
         ),
+        centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -66,26 +68,29 @@ class _PlayerpageState extends State<Playerpage> {
               itemCount: _players.length,
               itemBuilder: (context, index) {
                 final player = _players[index];
-                if (player.isHeader) {
-                  return ListTile(
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
                     title: Text(
                       player.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    tileColor: Colors.grey[200],
-                  );
-                } else {
-                  return ListTile(
-                    title: Text(
-                      player.name,
-                      style: const TextStyle(fontSize: 16),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(player.role,style: TextStyle(color: Colors.green),),
+                        const SizedBox(height: 4),
+                        Text('Batting Style: ${player.battingStyle}'),
+                        const SizedBox(height: 4),
+                        Text('Bowling Style: ${player.bowlingStyle ?? 'N/A'}'),
+                      ],
                     ),
-                    subtitle: Text(
-                      '${player.role}\nBatting Style: ${player.battingStyle}\nBowling Style: ${player.bowlingStyle ?? 'N/A'}',
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  );
-                }
+                  ),
+                );
               },
             ),
     );

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:cricket_app/screen/classmodel/model.dart';
+import 'package:cricket_app/screen/morepage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
 
 class RankingsPage extends StatefulWidget {
   @override
@@ -21,11 +21,12 @@ class _RankingsPageState extends State<RankingsPage> {
 
   Future<void> fetchBatsmenRankings() async {
     try {
-
       final response = await http.get(
-        Uri.parse('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/batsmen?formatType=test'),
+        Uri.parse(
+            'https://cricbuzz-cricket.p.rapidapi.com/stats/v1/rankings/batsmen?formatType=test'),
         headers: {
-          'X-RapidAPI-Key': '339ad43730msh1c4e5b0c7a473c7p1fa67cjsnf1b4f78c7de1', // Replace with your actual API key
+          'X-RapidAPI-Key':
+              '9af4284c3cmshd23f13b75b24bd6p1788b2jsnb00341e62d58',
           'X-RapidAPI-Host': 'cricbuzz-cricket.p.rapidapi.com',
         },
       );
@@ -64,9 +65,19 @@ class _RankingsPageState extends State<RankingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    
       appBar: AppBar(
+         actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MorePage()));
+            },
+          ),
+        ],
+        backgroundColor: const Color.fromARGB(255, 94, 160, 115),
         title: Text('Batsmen Rankings'),
+        centerTitle: true,
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -76,9 +87,25 @@ class _RankingsPageState extends State<RankingsPage> {
                 final batsman = _batsmen[index];
                 print('Batsman item: $batsman'); // Debugging
 
-                return ListTile(
-                  title: Text(batsman.name),
-                  subtitle: Text('Rating: ${batsman.rating}\nCountry: ${batsman.country}'),
+                return Card(
+                  color: Color.fromARGB(255, 251, 255, 252),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(16),
+                    title: Text(
+                      batsman.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    subtitle: Text(
+                      'Rating: ${batsman.rating}\nCountry: ${batsman.country}',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ),
                 );
               },
             ),
