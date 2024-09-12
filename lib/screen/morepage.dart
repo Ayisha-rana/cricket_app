@@ -43,17 +43,16 @@ class MorePage extends StatelessWidget {
   ];
 
   final List<Widget> _pages = [
-    // Replace these placeholders with actual pages when available
     BrowseSeriesPage(),
     TeamPage(),
     Playerpage(),
-    MatchSchedulesScreen(), // Schedule page
+    MatchSchedulesScreen(), 
     RankingsPage(),
     PhotosPage(), Recordspage(),
     SettingsPage(),
     FeedbackPage(),
-    PrivacyPolicyPage(), // FeedbackPage(),
-    AboutUsPage(), // About Us page
+    PrivacyPolicyPage(), 
+    AboutUsPage(), 
   ];
 
   @override

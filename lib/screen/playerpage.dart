@@ -24,26 +24,42 @@ class _PlayerpageState extends State<Playerpage> {
   Future<void> _fetchPlayerData() async {
     final url =
         'https://cricbuzz-cricket.p.rapidapi.com/series/v1/3718/squads/15826';
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'X-RapidAPI-Host':  ApiConfig.rapidApiKey,
-        'X-RapidAPI-Key': ApiConfig.rapidApiHost,
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'X-RapidAPI-Host': ApiConfig.rapidApiHost,
+          'X-RapidAPI-Key': ApiConfig.rapidApiKey,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      List<Player> players = (data['player'] as List)
-          .map((playerJson) => Player.fromJson(playerJson))
-          .toList();
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
 
+        // Print the entire response body for debugging
+        print('Response data: ${data}');
+
+        if (data['player'] != null) {
+          List<Player> players = (data['player'] as List)
+              .map((playerJson) => Player.fromJson(playerJson))
+              .toList();
+
+          setState(() {
+            _players = players;
+            _isLoading = false;
+          });
+        } else {
+          throw Exception('Player data not found in response');
+        }
+      } else {
+        throw Exception('Failed to load player data. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Print the error for debugging
+      print('Error fetching player data: $e');
       setState(() {
-        _players = players;
         _isLoading = false;
       });
-    } else {
-      throw Exception('Failed to load player data');
     }
   }
 
@@ -83,7 +99,7 @@ class _PlayerpageState extends State<Playerpage> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(player.role,style: TextStyle(color: Colors.green),),
+                        Text(player.role, style: TextStyle(color: Colors.green)),
                         const SizedBox(height: 4),
                         Text('Batting Style: ${player.battingStyle}'),
                         const SizedBox(height: 4),
